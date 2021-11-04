@@ -1,0 +1,570 @@
+package com.btc.app.dao;
+import java.util.List;
+
+import com.btc.app.model.Employee;
+
+
+public interface EmployeeDao {
+	public Employee addEmployee(Employee employee);
+
+	public Employee searchEmployeeById(int employeeId);
+
+	public boolean deleteEmployeeById(int employeeId);
+
+	public Employee updateEmployee(Employee employee);
+
+	public List<Employee> getAllEmployee();
+
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+package com.btc.app.dao;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.btc.app.model.Employee;
+
+public class EmployeeDaoImpl implements EmployeeDao {
+	private static Map<Integer, Employee> employees=new HashMap<>();
+
+
+
+	@Override
+	public Employee addEmployee(Employee employee) {
+
+		employees.put(employee.getEmployeeId(), employee);
+		return employee;
+	}
+
+	@Override
+	public Employee searchEmployeeById(int employeeId) {
+
+		return employees.get(employeeId);
+	}
+
+	@Override
+	public boolean deleteEmployeeById(int employeeId) {
+
+		employees.remove(employeeId);
+
+		return !employees.containsKey(employeeId);
+	}
+
+	@Override
+	public Employee updateEmployee(Employee employee) {
+		employees.put(employee.getEmployeeId(), employee);
+		return employee;
+	}
+
+	@Override
+	public List<Employee> getAllEmployee() {
+
+		List<Employee> emps= new ArrayList<Employee>(employees.values());
+
+		return emps;
+	}
+
+
+}
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+package com.btc.app.dao;
+import static org.junit.Assert.assertEquals;
+
+import java.time.LocalDate;
+
+import org.junit.Test;
+
+import com.btc.app.model.Employee;
+public class EmployeeDaoImplTest {
+
+	@Test
+	void testAddEmployee() {
+		Employee emp=new Employee(1006,"Uttam Reddy",LocalDate.parse("1994-02-10"),"uttam@gmail.com");
+		
+		Object dao;
+		assertEquals(emp, ((Object) dao).addEmployee(emp));
+		
+	}
+
+	@Test
+	void testSearchEmployeeById() {
+		
+	}
+
+	@Test
+	void testUpdateEmployee() {
+		
+	}
+
+	@Test
+	void testGetAllEmployee() {
+		
+	}
+
+
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+package com.btc.app.exception;
+
+public class AlreadyExistException extends RuntimeException{
+	private static final long serialVersionUID = 1L;
+
+	public AlreadyExistException() {
+			
+		}
+		
+		public AlreadyExistException(String message) {
+			super(message);
+		}
+
+}
+
+
+
+
+package com.btc.app.exception;
+
+public class InvalidAgeException extends RuntimeException{
+	private static final long serialVersionUID = 1L;
+	public InvalidAgeException()
+	{
+		
+	}
+	public InvalidAgeException(String message)
+	{
+		super(message);
+	}
+
+}
+
+
+
+package com.btc.app.exception;
+
+public class InvalidEmailException extends RuntimeException{
+	private static final long serialVersionUID = 1L;
+
+	public InvalidEmailException() {
+			
+		}
+		
+		public InvalidEmailException(String message) {
+			super(message);
+		}
+
+}
+
+
+
+package com.btc.app.exception;
+
+public class InvalidEmployeeId extends RuntimeException{
+	private static final long serialVersionUID = 1L;
+
+	public InvalidEmployeeId() {
+			
+		}
+		
+		public InvalidEmployeeId(String message) {
+			super(message);
+		}
+
+}
+
+
+
+package com.btc.app.exception;
+
+public class InvalidEmpNameException extends RuntimeException{
+	private static final long serialVersionUID = 1L;
+	public InvalidEmpNameException()
+	{
+		
+	}
+	public InvalidEmpNameException(String message)
+	{
+		super(message);
+	}
+
+}
+
+
+package com.btc.app.exception;
+
+public class NotFoundException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
+	public NotFoundException() {
+			
+		}
+		
+		public NotFoundException(String message) {
+			super(message);
+		}
+
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+package com.btc.app.model;
+import java.time.LocalDate;
+
+public class Employee {
+	private int employeeId;
+	private String employeeName;
+	private LocalDate dob;
+	private String email;
+
+
+	public Employee() {
+	}
+
+
+	public Employee(int employeeId, String employeeName, LocalDate dob, String email) {
+		super();
+		this.employeeId = employeeId;
+		this.employeeName = employeeName;
+		this.dob = dob;
+		this.email = email;
+	}
+
+
+	public int getEmployeeId() {
+		return employeeId;
+	}
+
+
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+
+	public LocalDate getDob() {
+		return dob;
+	}
+
+
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Employee [employeeId=" + employeeId + ", employeeName=" + employeeName + ", dob=" + dob + ", email="
+				+ email + "]";
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dob == null) ? 0 : dob.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + employeeId;
+		result = prime * result + ((employeeName == null) ? 0 : employeeName.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		if (dob == null) {
+			if (other.dob != null)
+				return false;
+		} else if (!dob.equals(other.dob))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (employeeId != other.employeeId)
+			return false;
+		if (employeeName == null) {
+			if (other.employeeName != null)
+				return false;
+		} else if (!employeeName.equals(other.employeeName))
+			return false;
+		return true;
+	}
+
+
+
+	
+
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+package com.btc.app.service;
+import java.util.List;
+
+import com.btc.app.model.Employee;
+
+public interface EmployeeService {
+
+	public Employee addEmployee(Employee employee);
+
+	public Employee searchEmployeeById(int employeeId);
+
+	public boolean deleteEmployeeById(int employeeId);
+
+	public Employee updateEmployee(Employee employee);
+
+	public List<Employee> getAllEmployee();
+
+
+
+}
+
+
+
+package com.btc.app.service;
+import java.util.List;
+
+import com.btc.app.dao.EmployeeDao;
+import com.btc.app.dao.EmployeeDaoImpl;
+import com.btc.app.model.Employee;
+
+
+public class EmployeeServiceImpl implements EmployeeService{
+	private EmployeeDao daoObj;
+
+	public EmployeeServiceImpl() {
+		daoObj = new EmployeeDaoImpl();
+	}
+
+	@Override
+	public Employee addEmployee(Employee employee) {
+		return daoObj.addEmployee(employee);
+	}
+
+	@Override
+	public Employee searchEmployeeById(int employeeId) {
+		return daoObj.searchEmployeeById(employeeId);
+	}
+
+	@Override
+	public boolean deleteEmployeeById(int employeeId) {
+
+		return daoObj.deleteEmployeeById(employeeId);
+	}
+
+	@Override
+	public Employee updateEmployee(Employee employee) {
+
+		return daoObj.updateEmployee(employee);
+	}
+
+	@Override
+	public List<Employee> getAllEmployee() {
+		 return daoObj.getAllEmployee();
+	}
+
+
+
+
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+package com.btc.app.ui;
+import java.time.LocalDate;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+import com.btc.app.model.Employee;
+import com.btc.app.service.EmployeeService;
+import com.btc.app.service.EmployeeServiceImpl;
+import com.btc.app.exception.InvalidEmployeeId;
+import com.btc.app.exception.NotFoundException;
+public class EmployeeAppUI {
+
+	private Scanner scanner=new Scanner(System.in);
+	private static EmployeeService service=new EmployeeServiceImpl();
+
+
+	public void addEmployee() {
+		System.out.println("Enter Employee Details :  ");
+		System.out.print("Employee ID : ");
+		int employeeId=scanner.nextInt();
+		System.out.print("Employee Name : ");
+		String employeeName=scanner.next()+scanner.nextLine();
+		System.out.print("Email : ");
+		String email=scanner.next()+scanner.nextLine();
+
+		System.out.print("Birth Date [yyyy-mm-dd] : ");
+		String dobString=scanner.next()+scanner.nextLine();
+
+		LocalDate dob=LocalDate.parse(dobString);
+
+		Employee employee= new Employee(employeeId, employeeName, dob, email);
+
+		Employee savedEmployee = service.addEmployee(employee);
+		System.out.println("Employee Added Successfully..");
+		System.out.println(savedEmployee);
+	}
+
+
+	public void showEmployee() {
+		System.out.println("Enter Employee Details :  ");
+		System.out.print("Employee ID : ");
+		int employeeId=scanner.nextInt();
+
+		Employee employee = service.searchEmployeeById(employeeId);
+
+		System.out.println(employee);
+	}
+	
+
+	public void deleteEmployeeId()
+	{
+		System.out.println("Enter Employee Details :  ");
+		System.out.print("Employee ID : ");
+		int employeeId=0;
+		try {
+			employeeId=scanner.nextInt();
+			if(employeeId<1000)
+			{
+				throw new InvalidEmployeeId("Enter four digit EmployeeId : "+employeeId);
+			}
+		} catch (InputMismatchException e) {
+			// TODO: handle exception
+			e.getMessage();
+			System.out.println("Enter the Integer Value ");
+		}
+		boolean value = service.deleteEmployeeById(employeeId);
+		if(value)
+		{
+			System.out.println("Deleted Successfully");
+		}
+		else {
+			throw new NotFoundException("Employee ID Not Found : "+employeeId);
+		}
+		
+	}
+
+	public void updateEmployee()
+	{
+		System.out.println("Enter Employee Details :  ");
+		System.out.print("Employee ID : ");
+		int employeeId=0;
+		try {
+			employeeId=scanner.nextInt();
+			if(employeeId<1000)
+			{
+				throw new InvalidEmployeeId("Enter four digit EmployeeId : "+employeeId);
+			}
+		} catch (InputMismatchException e) {
+			// TODO: handle exception
+			e.getMessage();
+			System.out.println("Enter the Integer Value ");
+		}
+		Employee employee = service.searchEmployeeById(employeeId);
+		if(employee!=null) {
+		System.out.println(employee);
+		System.out.print("Employee Name : ");
+		String employeeName=scanner.next()+scanner.nextLine();
+		System.out.print("Email : ");
+		String email=scanner.next()+scanner.nextLine();
+		System.out.print("Birth Date [yyyy-mm-dd] : ");
+		String dobString=scanner.next()+scanner.nextLine();
+		LocalDate dob=LocalDate.parse(dobString);
+		Employee employee1= new Employee(employeeId, employeeName, dob, email);
+		 service.updateEmployee(employee1);
+		 System.out.println("Update Successfully");
+		}
+		else {
+			throw new NotFoundException("Employee ID Not Found : "+employeeId);
+		}
+	}
+
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+package com.btc.apprunner;
+import java.util.Scanner;
+
+import com.btc.app.ui.EmployeeAppUI;
+
+public class EmployeeAppRunner {
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		EmployeeAppUI appUI = new EmployeeAppUI();
+		while (true) {
+			System.out.println("Enter a option :\n [1 - Add Employee] \n [2 - Search Employee] \n [3 - delete Employee]\n [0 - Exit]");
+			int option = scanner.nextInt();
+
+			switch (option) {
+			case 1:
+				appUI.addEmployee();
+				break;
+				
+			case 2:
+				appUI.showEmployee();
+				break;
+
+			case 0:
+				System.exit(1);
+				break;
+				
+			case 3:
+				appUI.deleteEmployeeId();
+				break;
+
+
+			default:
+				throw new IllegalArgumentException("Invalid Option: " + option);
+			}
+
+			System.out.println("\n");
+
+		}
+
+	}
+
+}
